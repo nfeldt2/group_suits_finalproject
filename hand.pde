@@ -8,7 +8,7 @@ class Hand{
   }
   
   ArrayList<Card> setHand(){
-    int numCards = 5;
+    int numCards = 2;
     ArrayList tempHand = new ArrayList();
     for (int i = 0; i < numCards; i++){
       tempHand.add(deck.get(i));

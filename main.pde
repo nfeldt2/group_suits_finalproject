@@ -24,10 +24,6 @@ void setup(){
     myDeck.removeCard(myHand.getCard(i));
   }
   
-  myDeck.readDeck();
-  println();
-  myHand.readHand();
-  
 }
 
 void draw(){

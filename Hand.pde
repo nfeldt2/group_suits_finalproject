@@ -4,16 +4,12 @@ class Hand{
   
   Hand(ArrayList<Card> deck){
     this.deck = deck;
-    hand = setHand();
+    this.hand = new ArrayList<Card>();
   }
   
-  ArrayList<Card> setHand(){
-    int numCards = 2;
-    ArrayList tempHand = new ArrayList();
-    for (int i = 0; i < numCards; i++){
-      tempHand.add(deck.get(i));
-    }
-    return tempHand;
+  void addCard(int current){
+    Card temp = deck.get(current);
+    hand.add(temp);
   }
   
   ArrayList<Card> getHand(){

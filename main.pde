@@ -72,6 +72,7 @@ void Menu() {
   text("+", buyInPlusButton.x + 10, buyInPlusButton.y + 15);
   text("-", buyInMinusButton.x + 10, buyInMinusButton.y + 15);
   text("Start", startButton.x + 50, startButton.y + 30);
+  fill(255);
   text("Settings", settingsButton.x + 50, settingsButton.y + 30);
 }
 
@@ -121,8 +122,8 @@ void drawSettingsWindow() {
   textSize(20);
   text("Exit", exitButton.x + 50, exitButton.y + 25);
   fill(0);
-  text("Easy", width/2 - 30, height/2 - 25);
-  text("Hard", width/2 + 70, height/2 - 25);
+  text("Easy", width/2 - 15, height/2 - 23);
+  text("Hard", width/2 + 85, height/2 - 23);
 }
 
 void mousePressed() {

@@ -1,8 +1,20 @@
 Deck myDeck;
 Hand myHand;
+Table myTable;
 ArrayList<Card> deck;
-String[] suits = {"spade", "club", "diamond", "heart"};
-String[] numbers = {"ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"};
+String[] suits = {"Spades", "Clubs", "Diamonds", "Hearts"};
+String[] numbers = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+PImage tableSprite;
+PImage raise;
+PImage fold;
+PImage check;
+boolean play = false;
+ArrayList<Card> displayedCards;
+int lastDealtTime; // Tracks the last time a card was dealt
+int cardCount; // Counts the number of cards dealt
+int nextCard = 0;
+final int dealInterval = 500; // Time interval in milliseconds (500ms = 0.5 seconds)
+final int maxCards = 10; // Maximum number of cards to deal
 
 int bankBalance = 1000;
 int buyInAmount = 100;
@@ -20,6 +32,14 @@ void setup() {
   color blue = color(0, 0, 255);
   color gray = color(200);
   
+  tableSprite = loadImage("table/poker_table.png");
+  raise = loadImage("table/raise_button.png");
+  fold = loadImage("table/fold_button.png");
+  check = loadImage("table/check_button.png");
+  check.resize(0, 50);
+  fold.resize(0, 55);
+  raise.resize(0, 48);
+  
   // creates and shuffles the deck
   deck = new ArrayList<Card>();
   for (int i = 0; i < suits.length; i++){
@@ -32,10 +52,8 @@ void setup() {
   myDeck.shuffleCards();
   
   // creates a hand for player and updates the deck
-  myHand = new Hand(deck);
-  for (int i = 0; i < myHand.getSize(); i++){
-    myDeck.removeCard(myHand.getCard(i));
-  }
+  displayedCards = new ArrayList<Card>();
+  myTable = new Table(true, myDeck.deck);
 
   buyInPlusButton = new Button(width/2 + 60, 135, 20, 20, gray);
   buyInMinusButton = new Button(width/2 - 80, 135, 20, 20, gray);
@@ -74,6 +92,32 @@ void Menu() {
   text("Start", startButton.x + 50, startButton.y + 30);
   fill(255);
   text("Settings", settingsButton.x + 50, settingsButton.y + 30);
+  
+  if (play) {
+    background(255);
+    imageMode(CORNER);
+    image(tableSprite, 75, 0);
+    image(check, 600, 325);
+    image(fold, 510, 323);
+    image(raise, 670, 325);
+    fill(0);
+    text(mouseX + ", " + mouseY, 10, 20);
+    
+    if (millis() - lastDealtTime > dealInterval && cardCount < maxCards) {
+          Card tempCard = deck.get(nextCard);
+          dealCard(tempCard);
+          nextCard += 1;
+          lastDealtTime = millis();
+          cardCount++;
+      }
+      
+      for (int i = displayedCards.size() - 1; i >= 0; i--) {
+        Card card = displayedCards.get(i);
+        if (card.update()) {
+            card.display();
+        }
+      }
+  }
 }
 
 void drawTitle() {
@@ -144,12 +188,23 @@ void mousePressed() {
       buyInAmount = max(buyInAmount - 100, 100);
     }
     if (startButton.isPressed(mouseX, mouseY)) {
-      // start game logic
-      // drawCards();
-      // must implement drawCards() and ruleCheck() to determine best hand
+      play = true;
     }
     if (settingsButton.isPressed(mouseX, mouseY)) {
       settingsWindow = true;
     }
   }
+}
+
+void dealCard(Card temp) {
+    int player = nextCard % 5;
+    int cardNumber = nextCard / 5;
+    temp.deal(player, cardNumber);
+    
+    if (myTable.getSize() != 5) {
+      myTable.addPlayer();
+    }
+    myTable.addCard(player, nextCard);
+    
+    displayedCards.add(temp);
 }

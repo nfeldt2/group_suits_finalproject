@@ -1,6 +1,8 @@
 Deck myDeck;
 Hand myHand;
-Table myTable;
+PrimeLookup myLookup = new PrimeLookup();
+PokerTable myTable;
+Table table;
 ArrayList<Card> deck;
 String[] suits = {"Spades", "Clubs", "Diamonds", "Hearts"};
 String[] numbers = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
@@ -13,8 +15,10 @@ ArrayList<Card> displayedCards;
 int lastDealtTime; // Tracks the last time a card was dealt
 int cardCount; // Counts the number of cards dealt
 int nextCard = 0;
-final int dealInterval = 500; // Time interval in milliseconds (500ms = 0.5 seconds)
+int lastPlayTime;
+final int dealInterval = 500;
 final int maxCards = 10; // Maximum number of cards to deal
+final int playInterval = 10;
 
 int bankBalance = 1000;
 int buyInAmount = 100;
@@ -26,6 +30,15 @@ RadioButton[] difficultyButtons;
 int aiDifficulty = 0; // 0 for easy, 1 for hard
 
 void setup() {
+  // create hashmap
+  table = loadTable("poker_output.csv", "header");
+  
+  for (TableRow row : table.rows()) {
+    int rank = row.getInt(0);
+    int product = row.getInt(8);
+    myLookup.addValue(product, rank);
+  }
+  Map<Integer, Integer> lookup = myLookup.lookupTable;
   size(800, 600);
   color red = color(255, 0, 0);
   color green = color(0, 255, 0);
@@ -53,7 +66,7 @@ void setup() {
   
   // creates a hand for player and updates the deck
   displayedCards = new ArrayList<Card>();
-  myTable = new Table(true, myDeck.deck);
+  myTable = new PokerTable(true, myDeck.deck, lookup);
 
   buyInPlusButton = new Button(width/2 + 60, 135, 20, 20, gray);
   buyInMinusButton = new Button(width/2 - 80, 135, 20, 20, gray);
@@ -101,18 +114,48 @@ void Menu() {
     image(fold, 510, 323);
     image(raise, 670, 325);
     fill(0);
-    text(mouseX + ", " + mouseY, 10, 20);
-    
+    text(mouseX + ", " + mouseY, 30, 20);
+    if (myTable.play && millis() - lastPlayTime > playInterval) {
+      if (myTable.play) {
+        if (myTable.user) {
+          // implement user player functionality
+          //if player has made his move make sure to set myTable.user = false; lastPlayTime = millis();
+          myTable.currentPlayer++;
+        } else {
+          // do AI player functionality
+          // set lastPlayTime = millis();
+          myTable.currentPlayer++;
+        }
+        lastPlayTime = millis();
+        if (myTable.currentPlayer == 5) {
+          myTable.currentPlayer = 0;
+          if (myTable.current_community == 3) {
+            int winner = myTable.getWinner();
+            print("winner: " + winner);
+            // give winner the pot
+            // declare winner
+            // round is over initialize new round
+            // reset all variables
+            myTable.play = false;
+          } else {
+            myTable.community = true;
+          }
+        }
+      }
+    }
     if (millis() - lastDealtTime > dealInterval && cardCount < maxCards) {
-          Card tempCard = deck.get(nextCard);
-          dealCard(tempCard);
-          nextCard += 1;
+          Card tempCard = deck.get(myTable.current_card);
+          myTable.dealCard(tempCard);
           lastDealtTime = millis();
           cardCount++;
+      } else if (myTable.community && millis() - lastDealtTime > dealInterval) {
+        myTable.dealCommunity();
+        lastDealtTime = millis();
+        lastPlayTime = millis();
       }
       
-      for (int i = displayedCards.size() - 1; i >= 0; i--) {
-        Card card = displayedCards.get(i);
+      for (int i = myTable.displayedCards.size() - 1; i >= 0; i--) {
+        Card card = myTable.displayedCards.get(i);
         if (card.update()) {
             card.display();
         }
@@ -194,17 +237,4 @@ void mousePressed() {
       settingsWindow = true;
     }
   }
-}
-
-void dealCard(Card temp) {
-    int player = nextCard % 5;
-    int cardNumber = nextCard / 5;
-    temp.deal(player, cardNumber);
-    
-    if (myTable.getSize() != 5) {
-      myTable.addPlayer();
-    }
-    myTable.addCard(player, nextCard);
-    
-    displayedCards.add(temp);
 }

@@ -9,18 +9,45 @@ class Card {
   float t;
   int player;
   String filename;
-  int[] positionsX = {260, 165, 386, 625, 515};
-  int[] positionsY = {90, 175, 267, 180, 90};
+  int encoding;
+  final int[] PRIMES = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41};
+  int[] positionsX = {260, 165, 386, 625, 515, 330, 364, 398, 432, 470};
+  int[] positionsY = {90, 175, 267, 180, 90, 180, 180, 180, 180, 180};
   ParticleSystem p;
 
   Card(String suit, String number) {
     this.suit = suit;
     this.number = number;
+    this.encoding = encodeCard();
+  }
+  
+  int encodeCard() {
+    int rank = stringRankToInt(number);;
+    
+    int prime = PRIMES[rank - 2];
+    
+    return prime;
+  }
+        
+  
+  int stringRankToInt(String rankStr) {
+    switch (rankStr) {
+            case "A":
+                return 14;
+            case "K":
+                return 13;
+            case "Q":
+                return 12;
+            case "J":
+                return 11;
+            default:
+                return Integer.parseInt(rankStr);
+        }
   }
 
   void deal(int player, int cardNumber) {
     this.player = player;
-    if (player == 2) {
+    if (player == 2 || player > 4) {
       filename = "cards/card" + suit + number + ".png";
     } else {
       filename = "cards/cardBack_red4.png";
@@ -76,6 +103,12 @@ class Card {
     }
     t += 0.01;
     return t <= 1;
+  }
+  
+  void flip() {
+    String filename = "cards/card" + suit + number + ".png";
+    image = loadImage(filename);
+    image.resize(0, 40);
   }
 
   void display() {

@@ -25,9 +25,12 @@ int buyInAmount = 100;
 int playerCostume = 0;
 boolean settingsWindow = false;
 
-Button buyInPlusButton, buyInMinusButton, startButton, settingsButton, exitButton;
+Button buyInPlusButton, buyInMinusButton, startButton, settingsButton, exitButton, musicToggleButton;
 RadioButton[] difficultyButtons;
 int aiDifficulty = 0; // 0 for easy, 1 for hard
+
+//Audio variables
+AudioManager audio;
 
 void setup() {
   // create hashmap
@@ -73,10 +76,14 @@ void setup() {
   startButton = new Button(width/2 - 50, 200, 100, 50, green);
   settingsButton = new Button(width/2 - 50, 260, 100, 50, blue);
   exitButton = new Button(width/2 - 50, height/2 + 100, 100, 50, red);
+  musicToggleButton = new Button(width/2 - 50, height/2 + 25, 100, 50, gray);
 
   difficultyButtons = new RadioButton[2];
   difficultyButtons[0] = new RadioButton(width/2 - 50, height/2 - 30, 10, 20, gray, 0, difficultyButtons);
   difficultyButtons[1] = new RadioButton(width/2 + 50, height/2 - 30, 10, 20, gray, 1, difficultyButtons);
+  
+  audio = new AudioManager(this);
+  audio.startMusic();
 }
 
 void draw() {
@@ -203,11 +210,13 @@ void drawSettingsWindow() {
   for (RadioButton button : difficultyButtons) {
     button.display();
   }
-
+  
+  musicToggleButton.display();
   exitButton.display();
   fill(255);
   textSize(20);
   text("Exit", exitButton.x + 50, exitButton.y + 25);
+  text("Toggle\nMusic", musicToggleButton.x + 50, musicToggleButton.y + 20);
   fill(0);
   text("Easy", width/2 - 15, height/2 - 23);
   text("Hard", width/2 + 85, height/2 - 23);
@@ -222,6 +231,13 @@ void mousePressed() {
     }
     if (exitButton.isPressed(mouseX, mouseY)) {
       settingsWindow = false;
+    }
+    if (musicToggleButton.isPressed(mouseX, mouseY)) {
+      if (audio.music.isPlaying()) {
+        audio.stopMusic();
+      } else {
+        audio.startMusic(); 
+      }
     }
   } else {
     if (buyInPlusButton.isPressed(mouseX, mouseY)) {

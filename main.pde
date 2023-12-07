@@ -15,12 +15,13 @@ int nextCard = 0;
 int lastPlayTime;
 final int dealInterval = 500;
 final int maxCards = 10; // Maximum number of cards to deal
-final int playInterval = 1000;
+final int playInterval = 1500;
 public boolean raise = false;
 public boolean fold = false;
 public boolean check = false;
 int lastPressed = 0;
 
+String message = "";
 int bankBalance = 1000;
 public int buyInAmount = 100;
 int playerCostume = 0;
@@ -122,17 +123,17 @@ void Menu() {
     raiseButton.display();
     checkButton.display();
     foldButton.display();
-    
     settingsButton2.display();
+    
     
     fill(0);
     text("Settings", settingsButton2.x + 35, settingsButton2.y + 25);
-    
     text("Raise", raiseButton.x + 40, raiseButton.y + 20);
     text("Check", checkButton.x + 40, checkButton.y + 20);
     text("Fold", foldButton.x + 40, foldButton.y + 17);
     
     text("Bet:" + myTable.checkValue, 350, 400);
+    text(message, 200, 350);
   
     if (myTable.play && millis() - lastPlayTime > playInterval) {
       
@@ -164,9 +165,27 @@ void Menu() {
             check = false;
           }
         } else {
+          int random = int(random(100));
+          if (myTable.players.get(myTable.currentPlayer).fold) {
+            random = 0;
+            message = "Player " + myTable.currentPlayer + " folded";
+          }
+          
+          if (random > 50) {
+            myTable.players.get(myTable.currentPlayer).check(myTable.checkValue);
+            message = "Player " + myTable.currentPlayer + " checked";
+            myTable.incrementPot();
           // do AI player play
+          } else if (random > 15) {
+            myTable.players.get(myTable.currentPlayer).raise();
+            myTable.checkValue += 5;
+            myTable.incrementPot();
+            message = "Player " + myTable.currentPlayer + " raised 5 dollars";
+          } else {
+            myTable.players.get(myTable.currentPlayer).fold();
+            message = "Player " + myTable.currentPlayer + " folded";
+          }
           // set lastPlayTime = millis();
-          print(myTable.currentPlayer);
           myTable.currentPlayer++;
         }
         lastPlayTime = millis();
@@ -295,15 +314,15 @@ void mousePressed() {
     }
   }
   if (play && 1000 < millis() - lastPressed) {
-    if (checkButton.isPressed(mouseX, mouseY) || key == 'c') {
+    if (checkButton.isPressed(mouseX, mouseY)) {
       check = true;
       lastPressed = millis();
     }
-    if (raiseButton.isPressed(mouseX, mouseY) || key == 'r') {
+    if (raiseButton.isPressed(mouseX, mouseY)) {
       raise = true;
       lastPressed = millis();
     }
-    if (foldButton.isPressed(mouseX, mouseY) || key == 'f') {
+    if (foldButton.isPressed(mouseX, mouseY)) {
       fold = true;
       lastPressed = millis();
     }
@@ -312,15 +331,15 @@ void mousePressed() {
 
 void keyPressed() {
   if (play && 1000 < millis() - lastPressed) {
-    if (checkButton.isPressed(mouseX, mouseY) || key == 'c') {
+    if (key == 'c') {
       check = true;
       lastPressed = millis();
     }
-    if (raiseButton.isPressed(mouseX, mouseY) || key == 'r') {
+    if (key == 'r') {
       raise = true;
       lastPressed = millis();
     }
-    if (foldButton.isPressed(mouseX, mouseY) || key == 'f') {
+    if (key == 'f') {
       fold = true;
       lastPressed = millis();
     }

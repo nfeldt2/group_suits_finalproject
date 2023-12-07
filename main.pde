@@ -171,7 +171,7 @@ void Menu() {
             message = "Player " + myTable.currentPlayer + " folded";
           }
           
-          if (random > 50) {
+          if (random > 32) {
             myTable.players.get(myTable.currentPlayer).check(myTable.checkValue);
             message = "Player " + myTable.currentPlayer + " checked";
             myTable.incrementPot();
@@ -180,6 +180,7 @@ void Menu() {
             myTable.players.get(myTable.currentPlayer).raise();
             myTable.checkValue += 5;
             myTable.incrementPot();
+            myTable.lastPlayer = myTable.currentPlayer;
             message = "Player " + myTable.currentPlayer + " raised 5 dollars";
           } else {
             myTable.players.get(myTable.currentPlayer).fold();

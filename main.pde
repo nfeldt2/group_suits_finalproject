@@ -26,7 +26,7 @@ public int buyInAmount = 100;
 int playerCostume = 0;
 boolean settingsWindow = false;
 
-Button buyInPlusButton, buyInMinusButton, startButton, settingsButton, exitButton, musicToggleButton, raiseButton, checkButton, foldButton;
+Button buyInPlusButton, buyInMinusButton, startButton, settingsButton, settingsButton2, exitButton, musicToggleButton, raiseButton, checkButton, foldButton;
 RadioButton[] difficultyButtons;
 int aiDifficulty = 0; // 0 for easy, 1 for hard
 
@@ -70,6 +70,7 @@ void setup() {
   buyInMinusButton = new Button(width/2 - 80, 135, 20, 20, gray);
   startButton = new Button(width/2 - 50, 200, 100, 50, green);
   settingsButton = new Button(width/2 - 50, 260, 100, 50, blue);
+  settingsButton2 = new Button(width - 120, 30, 80, 40, blue);
   exitButton = new Button(width/2 - 50, height/2 + 100, 100, 50, red);
   musicToggleButton = new Button(width/2 - 50, height/2 + 25, 100, 50, gray);
   
@@ -122,11 +123,14 @@ void Menu() {
     checkButton.display();
     foldButton.display();
     
+    settingsButton2.display();
     
     fill(0);
+    text("Settings", settingsButton2.x + 35, settingsButton2.y + 25);
+    
     text("Raise", raiseButton.x + 40, raiseButton.y + 20);
     text("Check", checkButton.x + 40, checkButton.y + 20);
-    text("Fold", foldButton.x + 40, foldButton.y + 20);
+    text("Fold", foldButton.x + 40, foldButton.y + 17);
     
     text("Bet:" + myTable.checkValue, 350, 400);
   
@@ -291,15 +295,15 @@ void mousePressed() {
     }
   }
   if (play && 1000 < millis() - lastPressed) {
-    if (checkButton.isPressed(mouseX, mouseY)) {
+    if (checkButton.isPressed(mouseX, mouseY) || key == 'c') {
       check = true;
       lastPressed = millis();
     }
-    if (raiseButton.isPressed(mouseX, mouseY)) {
+    if (raiseButton.isPressed(mouseX, mouseY) || key == 'r') {
       raise = true;
       lastPressed = millis();
     }
-    if (foldButton.isPressed(mouseX, mouseY)) {
+    if (foldButton.isPressed(mouseX, mouseY) || key == 'f') {
       fold = true;
       lastPressed = millis();
     }
@@ -308,15 +312,15 @@ void mousePressed() {
 
 void keyPressed() {
   if (play && 1000 < millis() - lastPressed) {
-    if (checkButton.isPressed(mouseX, mouseY)) {
+    if (checkButton.isPressed(mouseX, mouseY) || key == 'c') {
       check = true;
       lastPressed = millis();
     }
-    if (raiseButton.isPressed(mouseX, mouseY)) {
+    if (raiseButton.isPressed(mouseX, mouseY) || key == 'r') {
       raise = true;
       lastPressed = millis();
     }
-    if (foldButton.isPressed(mouseX, mouseY)) {
+    if (foldButton.isPressed(mouseX, mouseY) || key == 'f') {
       fold = true;
       lastPressed = millis();
     }

@@ -135,7 +135,9 @@ void Menu() {
     
     text("Bet:" + myTable.checkValue, 350, 400);
     text(message, 200, 350);
-  
+    text("Bank: " + bankBalance, 350, 430);
+    text("pot: " + int(myTable.pot + buyInAmount * 5), 350, 370);
+
     if (myTable.play && millis() - lastPlayTime > playInterval) {
       
       if (myTable.play) {
@@ -197,6 +199,14 @@ void Menu() {
           if (myTable.current_community == 3) {
             int winner = myTable.getWinner();
             print("winner: " + winner);
+            bankBalance -= myTable.buyIn;
+            myTable.pot += myTable.buyIn * 5;
+            if (winner == 2) {
+              message = "You win $" + myTable.pot;
+              bankBalance += myTable.pot;
+            } else {
+              message = "Player " + winner + " wins $" + myTable.pot;
+            }
             myTable.players.get(winner).addPot(myTable.pot);
             myTable.newRound();
             cardCount = 0;

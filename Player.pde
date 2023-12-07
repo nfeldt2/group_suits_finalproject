@@ -3,6 +3,7 @@ class Player {
   Hand hand;
   int bank;
   int id;
+  boolean fold = false;
   
   int currentBet = 0;
   
@@ -21,7 +22,9 @@ class Player {
     currentBet += 5;
   }
   
-  void check() {}
+  void check(int checkAmount) {
+  bank -= checkAmount;
+}
   
   void fold() {
     fold = true;

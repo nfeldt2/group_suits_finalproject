@@ -2,7 +2,7 @@ Narrative: One-player game of 2D Texas Hold ‘Em. There will be one user player
 
 The project contains the following classes: AudioManager, Button, Card, Deck, File, Hand, Particle, ParticleSystems, Player, PrimeLookUp, RadioButton, Table, Main
 
-Jaden Wood: I implemented a comprehensive menu screen. The menu includes key features such as the game title, a display of the player's bank balance, an adjustable buy-in interface, and an interactive player costume section. To enhance modularity and code organization, I introduced the Button class for general button functionality and the RadioButton class for radio button elements. These classes facilitate the creation, display, and interaction handling of various buttons in the menu, ensuring a clean and extensible design. Additionally, I employed a boolean variable, gameInProgress, to dynamically disable specific buttons, such as the settings button, during gameplay for a more intuitive user experience.
+Jaden Wood: I implemented a comprehensive menu screen. The menu includes key features such as the game title, a display of the player's bank balance, an adjustable buy-in interface, and an interactive player costume section. To enhance modularity and code organization, I introduced the Button class for general button functionality and the RadioButton class for radio button elements. These classes facilitate the creation, display, and interaction handling of various buttons in the menu, ensuring a clean and extensible design. Unfortunately, I was unable to fix a bug where the Settings button is still accessible while in the main game.
 
 Joseph Horak:
 

@@ -18,6 +18,7 @@ class PokerTable{
   int checkValue;
   boolean roundOver;
   int pot;
+  int buyIn = 0;
   
   PokerTable(boolean deal_players, ArrayList<Card> deck, Map<Integer, Integer> myLookup) { 
     this.deck = deck;
@@ -27,6 +28,7 @@ class PokerTable{
     this.current_card = current_card;
     this.checkValue = checkValue;
     this.community = community;
+    this.buyIn = buyIn;
     this.pot = 0;
     players = new ArrayList<Player>();
     this.displayedCards = new ArrayList<Card>();

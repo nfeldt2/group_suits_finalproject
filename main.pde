@@ -137,43 +137,52 @@ void Menu() {
     if (myTable.play && millis() - lastPlayTime > playInterval) {
       
       if (myTable.play) {
-        if (myTable.user) {
+        if (myTable.currentPlayer == 2) {
           // implement user player functionality
           // if player has made his move make sure to set myTable.user = false; lastPlayTime = millis();
+          if (raiseButton.isPressed(mouseX, mouseY)) {
+            //implement button to determine raise amount
+            myTable.players.get(myTable.currentPlayer).raise();
+            //assign check value to amount raised
+            myTable.incrementPot();
+            myTable.lastPlayer = myTable.currentPlayer;
+            myTable.currentPlayer++;
+          }
+          if (foldButton.isPressed(mouseX, mouseY)) {
+            myTable.players.get(myTable.currentPlayer).fold();
+            myTable.currentPlayer++;
+          }
+          if (checkButton.isPressed(mouseX, mouseY)) {
+            myTable.players.get(myTable.currentPlayer).check(myTable.checkValue);
+            myTable.incrementPot();
+            myTable.currentPlayer++;
+          }
           lastPlayTime = millis();
-          myTable.user = false;
           myTable.currentPlayer++;
         } else {
-          // do AI player functionality
+          // do AI player play
           // set lastPlayTime = millis();
-          lastPlayTime = millis();
+          print(myTable.currentPlayer);
           myTable.currentPlayer++;
         }
         lastPlayTime = millis();
-        if (myTable.currentPlayer == 5) {
+        if (myTable.currentPlayer == myTable.lastPlayer) {
           myTable.currentPlayer = 0;
           if (myTable.current_community == 3) {
             int winner = myTable.getWinner();
-            int allbets = 0;
-            for (Player player : myTable.players) {
-              allbets += player.currentBet;
-            }
-            
-            myTable.players.get(winner).bank += allbets - myTable.players.get(winner).currentBet;
-            
-            for (Player player : myTable.players) {
-              player.currentBet = 0;
-            }
-            
             print("winner: " + winner);
-            // give winner the pot
-            // declare winner
-            // round is over initialize new round
-            // reset all variables
+            myTable.players.get(winner).addPot(myTable.pot);
+            myTable.newRound();
+            cardCount = 0;
             myTable.play = false;
+            myDeck.shuffleCards();
+            myTable.deck = myDeck.deck;
+            lastDealtTime = millis();
           } else {
             myTable.community = true;
           }
+        } else if (myTable.currentPlayer == 5) {
+          myTable.currentPlayer = 0;
         }
       }
     }

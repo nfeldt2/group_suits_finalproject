@@ -4,7 +4,7 @@ The project contains the following classes: AudioManager, Button, Card, Deck, Fi
 
 Jaden Wood: I implemented a comprehensive menu screen. The menu includes key features such as the game title, a display of the player's bank balance, an adjustable buy-in interface, and an interactive player costume section. To enhance modularity and code organization, I introduced the Button class for general button functionality and the RadioButton class for radio button elements. These classes facilitate the creation, display, and interaction handling of various buttons in the menu, ensuring a clean and extensible design. Unfortunately, I was unable to fix a bug where the Settings button is still accessible while in the main game.
 
-Joseph Horak:
+Joseph Horak: I implemented the sound and sound setting for the game, as well as the particle system that plays while the cards are being dealth, which is our subanimation for the animation hierarchy. I also made alternate avatars that the player would be able to buy with their winnings, but unfortunately we didn't have time to implement that part.
 
 Nathan Feldt: I implemented the Table class. The table class was responsible for game flow and parts of game logic. one part of the Table class decided what hands where the best by taking the prime product of each hand and finding the hand rank in a hashmap. additionally the Table class determined when a card should be dealt and when betting should continue. additionally I implemented the card animations for dealing.
 

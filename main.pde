@@ -305,3 +305,20 @@ void mousePressed() {
     }
   }
 }
+
+void keyPressed() {
+  if (play && 1000 < millis() - lastPressed) {
+    if (checkButton.isPressed(mouseX, mouseY)) {
+      check = true;
+      lastPressed = millis();
+    }
+    if (raiseButton.isPressed(mouseX, mouseY)) {
+      raise = true;
+      lastPressed = millis();
+    }
+    if (foldButton.isPressed(mouseX, mouseY)) {
+      fold = true;
+      lastPressed = millis();
+    }
+  }
+}

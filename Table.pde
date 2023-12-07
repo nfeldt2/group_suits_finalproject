@@ -32,8 +32,8 @@ class PokerTable{
     this.displayedCards = new ArrayList<Card>();
   }
   
-  void addPlayer() {
-    players.add(new Player(deck, myLookup));
+  void addPlayer(int player) {
+    players.add(new Player(deck, myLookup, player));
   }
   
   void removePlayer(int player) {
@@ -107,7 +107,7 @@ class PokerTable{
     temp.deal(player, cardNumber);
     
     if (myTable.getSize() != 5) {
-      this.addPlayer();
+      this.addPlayer(player);
     }
     
     this.addCard(player, current_card);

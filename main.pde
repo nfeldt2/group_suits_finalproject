@@ -127,20 +127,26 @@ void Menu() {
     checkButton.display();
     foldButton.display();
     
+    myTable.write();
+    
     fill(0);
     text("Raise", raiseButton.x + 40, raiseButton.y + 20);
     text("Check", checkButton.x + 40, checkButton.y + 20);
     text("Fold", foldButton.x + 40, foldButton.y + 20);
   
     if (myTable.play && millis() - lastPlayTime > playInterval) {
+      
       if (myTable.play) {
         if (myTable.user) {
           // implement user player functionality
-          //if player has made his move make sure to set myTable.user = false; lastPlayTime = millis();
+          // if player has made his move make sure to set myTable.user = false; lastPlayTime = millis();
+          lastPlayTime = millis();
+          myTable.user = false;
           myTable.currentPlayer++;
         } else {
           // do AI player functionality
           // set lastPlayTime = millis();
+          lastPlayTime = millis();
           myTable.currentPlayer++;
         }
         lastPlayTime = millis();
@@ -148,6 +154,17 @@ void Menu() {
           myTable.currentPlayer = 0;
           if (myTable.current_community == 3) {
             int winner = myTable.getWinner();
+            int allbets = 0;
+            for (Player player : myTable.players) {
+              allbets += player.currentBet;
+            }
+            
+            myTable.players.get(winner).bank += allbets - myTable.players.get(winner).currentBet;
+            
+            for (Player player : myTable.players) {
+              player.currentBet = 0;
+            }
+            
             print("winner: " + winner);
             // give winner the pot
             // declare winner
@@ -264,8 +281,14 @@ void mousePressed() {
     }
   }
   if (play) {
-    checkButton.isPressed(mouseX, mouseY);
-    raiseButton.isPressed(mouseX, mouseY);
-    foldButton.isPressed(mouseX, mouseY);
+    if (checkButton.isPressed(mouseX, mouseY)) {
+      
+    }
+    if (raiseButton.isPressed(mouseX, mouseY)) {
+      myTable.players.get(0).raise();
+    }
+    if (foldButton.isPressed(mouseX, mouseY)) {
+      
+    }
   }
 }

@@ -24,8 +24,8 @@ class PokerTable{
     this.displayedCards = new ArrayList<Card>();
   }
   
-  void addPlayer() {
-    players.add(new Player(deck, myLookup));
+  void addPlayer(int id) {
+    players.add(new Player(deck, myLookup, id));
   }
   
   void removePlayer(int player) {
@@ -96,12 +96,21 @@ class PokerTable{
     temp.deal(player, cardNumber);
     
     if (myTable.getSize() != 5) {
-      this.addPlayer();
+      this.addPlayer(player);
     }
     
     this.addCard(player, current_card);
     current_card++;
     displayedCards.add(temp);
+  }
+  
+  void write() {
+    int start = 370;
+    for (Player player : players) {
+      fill(0);
+      text("Player: " + player.id + " | Bet: "  + player.currentBet + " | Money: " + player.bank, 140, start);
+      start += 30;
+    }
   }
 }
     

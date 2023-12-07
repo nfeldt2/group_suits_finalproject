@@ -25,6 +25,10 @@ class Hand{
     }
   }
   
+  void resetHand() {
+    hand = new ArrayList<Card>();
+  }
+  
   int getSize(){
     return hand.size();
   }

@@ -22,7 +22,7 @@ public boolean check = false;
 int lastPressed = 0;
 
 String message = "";
-int bankBalance = 1000;
+int bankBalance;
 public int buyInAmount = 100;
 int playerCostume = 0;
 boolean settingsWindow = false;
@@ -43,6 +43,16 @@ void setup() {
     int product = row.getInt(8);
     myLookup.addValue(product, rank);
   }
+  
+  String[] lines = loadStrings("bank_balance.txt");
+  if (lines.length > 0) {
+    // Assuming the first line of the file contains the bank balance
+    bankBalance = int(lines[0]);
+  } else {
+    // Default starting bank balance if the file is empty or not found
+    bankBalance = 1000;
+  }
+  
   Map<Integer, Integer> lookup = myLookup.lookupTable;
   size(800, 600);
   color red = color(255, 0, 0);
@@ -348,4 +358,16 @@ void keyPressed() {
       lastPressed = millis();
     }
   }
+}
+
+void saveBankBalance() {
+  // Save the current bank balance to the text file
+  String[] lines = {str(bankBalance)};
+  saveStrings("bank_balance.txt", lines);
+}
+
+void exit() {
+  // Called when the sketch is closed
+  saveBankBalance();
+  super.exit(); 
 }

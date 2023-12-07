@@ -135,10 +135,10 @@ void Menu() {
       if (myTable.play) {
         print(myTable.currentPlayer);
         if (myTable.currentPlayer == 2) {
+          if (myTable.players.get(2).fold) {myTable.currentPlayer++;}
           // implement user player functionality
           // if player has made his move make sure to set myTable.user = false; lastPlayTime = millis();
           if (raise) {
-            print(raise);
             //implement button to determine raise amount
             myTable.players.get(myTable.currentPlayer).raise();
             //assign check value to amount raised

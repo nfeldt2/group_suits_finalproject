@@ -7,9 +7,6 @@ ArrayList<Card> deck;
 String[] suits = {"Spades", "Clubs", "Diamonds", "Hearts"};
 String[] numbers = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
 PImage tableSprite;
-PImage raise;
-PImage fold;
-PImage check;
 boolean play = false;
 ArrayList<Card> displayedCards;
 int lastDealtTime; // Tracks the last time a card was dealt
@@ -18,7 +15,11 @@ int nextCard = 0;
 int lastPlayTime;
 final int dealInterval = 500;
 final int maxCards = 10; // Maximum number of cards to deal
-final int playInterval = 10;
+final int playInterval = 1000;
+public boolean raise = false;
+public boolean fold = false;
+public boolean check = false;
+int lastPressed = 0;
 
 int bankBalance = 1000;
 public int buyInAmount = 100;
@@ -49,12 +50,6 @@ void setup() {
   color gray = color(200);
   
   tableSprite = loadImage("table/poker_table.png");
-  raise = loadImage("table/raise_button.png");
-  fold = loadImage("table/fold_button.png");
-  check = loadImage("table/check_button.png");
-  check.resize(0, 50);
-  fold.resize(0, 55);
-  raise.resize(0, 48);
   
   // creates and shuffles the deck
   deck = new ArrayList<Card>();
@@ -132,29 +127,37 @@ void Menu() {
     text("Raise", raiseButton.x + 40, raiseButton.y + 20);
     text("Check", checkButton.x + 40, checkButton.y + 20);
     text("Fold", foldButton.x + 40, foldButton.y + 20);
+    
+    text("Bet:" + myTable.checkValue, 350, 400);
   
     if (myTable.play && millis() - lastPlayTime > playInterval) {
       
       if (myTable.play) {
+        print(myTable.currentPlayer);
         if (myTable.currentPlayer == 2) {
           // implement user player functionality
           // if player has made his move make sure to set myTable.user = false; lastPlayTime = millis();
-          if (raiseButton.isPressed(mouseX, mouseY)) {
+          if (raise) {
+            print(raise);
             //implement button to determine raise amount
             myTable.players.get(myTable.currentPlayer).raise();
             //assign check value to amount raised
+            myTable.checkValue += 5;
             myTable.incrementPot();
             myTable.lastPlayer = myTable.currentPlayer;
             myTable.currentPlayer++;
+            raise = false;
           }
-          if (foldButton.isPressed(mouseX, mouseY)) {
+          if (fold) {
             myTable.players.get(myTable.currentPlayer).fold();
             myTable.currentPlayer++;
+            fold = false;
           }
-          if (checkButton.isPressed(mouseX, mouseY)) {
+          if (check) {
             myTable.players.get(myTable.currentPlayer).check(myTable.checkValue);
             myTable.incrementPot();
             myTable.currentPlayer++;
+            check = false;
           }
         } else {
           // do AI player play
@@ -165,6 +168,7 @@ void Menu() {
         lastPlayTime = millis();
         if (myTable.currentPlayer == myTable.lastPlayer) {
           myTable.currentPlayer = 0;
+          myTable.lastPlayer = 5;
           if (myTable.current_community == 3) {
             int winner = myTable.getWinner();
             print("winner: " + winner);
@@ -174,7 +178,7 @@ void Menu() {
             myTable.play = false;
             myDeck.shuffleCards();
             myTable.deck = myDeck.deck;
-            lastDealtTime = millis();
+            lastDealtTime = millis() + 1000;
           } else {
             myTable.community = true;
           }
@@ -286,15 +290,18 @@ void mousePressed() {
       settingsWindow = true;
     }
   }
-  if (play) {
+  if (play && 1000 < millis() - lastPressed) {
     if (checkButton.isPressed(mouseX, mouseY)) {
-      
+      check = true;
+      lastPressed = millis();
     }
     if (raiseButton.isPressed(mouseX, mouseY)) {
-      myTable.players.get(0).raise();
+      raise = true;
+      lastPressed = millis();
     }
     if (foldButton.isPressed(mouseX, mouseY)) {
-      
+      fold = true;
+      lastPressed = millis();
     }
   }
 }

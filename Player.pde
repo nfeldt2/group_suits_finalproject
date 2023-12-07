@@ -10,6 +10,7 @@ class Player {
     hand = new Hand(deck, myLookup);
     bank = buyInAmount;
     this.id = id;
+    this.fold = fold;
   }
   
   void reset() {
@@ -22,6 +23,10 @@ class Player {
   
   void check() {}
   
-  void fold() {}
+  void fold() {
+    fold = true;
+  }
+
+  void addPot (int pot) {}
   
 }

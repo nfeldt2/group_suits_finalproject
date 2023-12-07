@@ -127,7 +127,6 @@ void Menu() {
     checkButton.display();
     foldButton.display();
     
-    myTable.write();
     
     fill(0);
     text("Raise", raiseButton.x + 40, raiseButton.y + 20);
@@ -157,8 +156,6 @@ void Menu() {
             myTable.incrementPot();
             myTable.currentPlayer++;
           }
-          lastPlayTime = millis();
-          myTable.currentPlayer++;
         } else {
           // do AI player play
           // set lastPlayTime = millis();

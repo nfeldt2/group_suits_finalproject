@@ -10,4 +10,4 @@ Nathan Feldt:
 
 Kireeti Setty:
 
-Abraham Rodriguez: 
+Abraham Rodriguez: I implemented the Card, Deck, and Main classes as well as the README and parts of Main. The Card functionality stores the values for a single card in a deck and is used to store this information as well as be referenced in order to show the correct cards on display. The Deck functionality is able to construct card objects to form a complete deck. it is also able to remove cards from its arraylist as it deals out those cards. Due to changes in scope, we have decided to leave it as only allowing one deck to play with, that is shuffled in between each round. Lastly, the Hand class is able to store the information for any player's current card objects they have been dealt by the deck object. It grabs the best value using the cards in the center and is reset after every round. 

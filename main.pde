@@ -22,7 +22,7 @@ public boolean check = false;
 int lastPressed = 0;
 
 String message = "";
-int bankBalance;
+int bankBalance = 1000;
 public int buyInAmount = 100;
 int playerCostume = 0;
 boolean settingsWindow = false;
@@ -43,16 +43,6 @@ void setup() {
     int product = row.getInt(8);
     myLookup.addValue(product, rank);
   }
-  
-  String[] lines = loadStrings("bank_balance.txt");
-  if (lines.length > 0) {
-    // Assuming the first line of the file contains the bank balance
-    bankBalance = int(lines[0]);
-  } else {
-    // Default starting bank balance if the file is empty or not found
-    bankBalance = 1000;
-  }
-  
   Map<Integer, Integer> lookup = myLookup.lookupTable;
   size(800, 600);
   color red = color(255, 0, 0);
@@ -142,9 +132,10 @@ void Menu() {
     text("Check", checkButton.x + 40, checkButton.y + 20);
     text("Fold", foldButton.x + 40, foldButton.y + 17);
     
-    text("Bet:" + myTable.checkValue, 350, 400);
+    text("Bet: " + myTable.checkValue, 350, 400);
     text(message, 200, 350);
-    text("Bank: " + bankBalance, 250, 430);
+    text("Bank: " + bankBalance, 350, 430);
+    text("pot: " + int(myTable.pot + buyInAmount * 5), 350, 370); 
   
     if (myTable.play && millis() - lastPlayTime > playInterval) {
       myTable.buyIn = buyInAmount;
@@ -210,7 +201,12 @@ void Menu() {
             print("winner: " + winner);
             bankBalance -= myTable.buyIn;
             myTable.pot += myTable.buyIn * 5;
-            bankBalance += myTable.pot;
+            if (winner == 2) {
+              message = "You win $" + myTable.pot;
+              bankBalance += myTable.pot;
+            } else {
+              message = "Player " + winner + " wins $" + myTable.pot;
+            }
             myTable.players.get(winner).addPot(myTable.pot);
             myTable.newRound();
             cardCount = 0;
@@ -363,16 +359,4 @@ void keyPressed() {
       lastPressed = millis();
     }
   }
-}
-
-void saveBankBalance() {
-  // Save the current bank balance to the text file
-  String[] lines = {str(bankBalance)};
-  saveStrings("bank_balance.txt", lines);
-}
-
-void exit() {
-  // Called when the sketch is closed
-  saveBankBalance();
-  super.exit(); 
 }

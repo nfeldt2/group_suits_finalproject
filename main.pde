@@ -50,15 +50,6 @@ void setup() {
     myLookup.addValue(product, rank);
   }
 
-  String[] lines = loadStrings("bank_balance.txt");
-  if (lines.length > 0) {
-    // Assuming the first line of the file contains the bank balance
-    bankBalance = int(lines[0]);
-  } else {
-    // Default starting bank balance if the file is empty or not found
-    bankBalance = 1000;
-  }
-
   Map<Integer, Integer> lookup = myLookup.lookupTable;
   size(800, 600);
   color red = color(255, 0, 0);

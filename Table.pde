@@ -50,6 +50,9 @@ class PokerTable{
     int best = 10000;
     int temp;
     for (Player player : players) {
+      if (player.fold) {
+        continue;
+      }
       temp = player.hand.findBestHand();
       println("player: " + player_num + " rank: " + temp);
       if (temp < best) {
@@ -129,5 +132,4 @@ class PokerTable{
   }
 }
     
-  
   

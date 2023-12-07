@@ -22,18 +22,15 @@ public boolean check = false;
 int lastPressed = 0;
 
 String message = "";
-int bankBalance = 1000;
+int bankBalance;
 public int buyInAmount = 100;
 int playerCostume = 0;
 boolean settingsWindow = false;
-
 Button buyInPlusButton, buyInMinusButton, startButton, settingsButton, settingsButton2, exitButton, musicToggleButton, raiseButton, checkButton, foldButton;
 RadioButton[] difficultyButtons;
 int aiDifficulty = 0; // 0 for easy, 1 for hard
-
 //Audio variables
 AudioManager audio;
-
 void setup() {
   // create hashmap
   table = loadTable("poker_output.csv", "header");
@@ -43,6 +40,16 @@ void setup() {
     int product = row.getInt(8);
     myLookup.addValue(product, rank);
   }
+
+  String[] lines = loadStrings("bank_balance.txt");
+  if (lines.length > 0) {
+    // Assuming the first line of the file contains the bank balance
+    bankBalance = int(lines[0]);
+  } else {
+    // Default starting bank balance if the file is empty or not found
+    bankBalance = 1000;
+  }
+
   Map<Integer, Integer> lookup = myLookup.lookupTable;
   size(800, 600);
   color red = color(255, 0, 0);
@@ -66,7 +73,6 @@ void setup() {
   // creates a hand for player and updates the deck
   displayedCards = new ArrayList<Card>();
   myTable = new PokerTable(true, myDeck.deck, lookup);
-
   buyInPlusButton = new Button(width/2 + 60, 135, 20, 20, gray);
   buyInMinusButton = new Button(width/2 - 80, 135, 20, 20, gray);
   startButton = new Button(width/2 - 50, 200, 100, 50, green);
@@ -78,7 +84,6 @@ void setup() {
   raiseButton = new Button(width/2 + 100, 340, 100, 30, green);
   checkButton = new Button(width/2 + 100, 380, 100, 30, gray);
   foldButton = new Button(width/2 + 100, 420, 100, 30, red);
-
   difficultyButtons = new RadioButton[2];
   difficultyButtons[0] = new RadioButton(width/2 - 50, height/2 - 30, 10, 20, gray, 0, difficultyButtons);
   difficultyButtons[1] = new RadioButton(width/2 + 50, height/2 - 30, 10, 20, gray, 1, difficultyButtons);
@@ -86,7 +91,6 @@ void setup() {
   audio = new AudioManager(this);
   audio.startMusic();
 }
-
 void draw() {
   if (settingsWindow) {
     drawSettingsWindow();
@@ -94,19 +98,16 @@ void draw() {
     Menu();
   }
 }
-
 void Menu() {
   background(255);
   drawTitle();
   drawBankDisplay();
   drawBuyInAdjustment();
   drawPlayerCostume();
-
   buyInPlusButton.display();
   buyInMinusButton.display();
   startButton.display();
   settingsButton.display();
-
   fill(0);
   text("+", buyInPlusButton.x + 10, buyInPlusButton.y + 15);
   text("-", buyInMinusButton.x + 10, buyInMinusButton.y + 15);
@@ -132,13 +133,11 @@ void Menu() {
     text("Check", checkButton.x + 40, checkButton.y + 20);
     text("Fold", foldButton.x + 40, foldButton.y + 17);
     
-    text("Bet: " + myTable.checkValue, 350, 400);
+    text("Bet:" + myTable.checkValue, 350, 400);
     text(message, 200, 350);
-    text("Bank: " + bankBalance, 350, 430);
-    text("pot: " + int(myTable.pot + buyInAmount * 5), 350, 370); 
   
     if (myTable.play && millis() - lastPlayTime > playInterval) {
-      myTable.buyIn = buyInAmount;
+      
       if (myTable.play) {
         print(myTable.currentPlayer);
         if (myTable.currentPlayer == 2) {
@@ -151,7 +150,6 @@ void Menu() {
             //assign check value to amount raised
             myTable.checkValue += 5;
             myTable.incrementPot();
-            bankBalance -= myTable.checkValue;
             myTable.lastPlayer = myTable.currentPlayer;
             myTable.currentPlayer++;
             raise = false;
@@ -199,14 +197,6 @@ void Menu() {
           if (myTable.current_community == 3) {
             int winner = myTable.getWinner();
             print("winner: " + winner);
-            bankBalance -= myTable.buyIn;
-            myTable.pot += myTable.buyIn * 5;
-            if (winner == 2) {
-              message = "You win $" + myTable.pot;
-              bankBalance += myTable.pot;
-            } else {
-              message = "Player " + winner + " wins $" + myTable.pot;
-            }
             myTable.players.get(winner).addPot(myTable.pot);
             myTable.newRound();
             cardCount = 0;
@@ -241,44 +231,37 @@ void Menu() {
       }
   }
 }
-
 void drawTitle() {
   textSize(32);
   textAlign(CENTER);
   fill(0);
   text("Texas Hold 'Em", width/2, 50);
 }
-
 void drawBankDisplay() {
   textSize(20);
   textAlign(CENTER);
   fill(0);
   text("Bank: $" + bankBalance, width/2, 100);
 }
-
 void drawBuyInAdjustment() {
   textSize(20);
   textAlign(CENTER);
   fill(0);
   text("Buy-in: $" + buyInAmount, width/2, 150);
 }
-
 void drawPlayerCostume() {
   // placeholder for player costume display
   rect(width/2 - 50, 320, 100, 100);
-
   // add left and right arrows for costume change
   textSize(20);
   text("<", width/2 - 70, 370);
   text(">", width/2 + 70, 370);
 }
-
 void drawSettingsWindow() {
   fill(0, 0, 0, 150);
   rect(0, 0, width, height);
   fill(255);
   rect(width/4, height/4, width/2, height/2);
-
   for (RadioButton button : difficultyButtons) {
     button.display();
   }
@@ -293,7 +276,6 @@ void drawSettingsWindow() {
   text("Easy", width/2 - 15, height/2 - 23);
   text("Hard", width/2 + 85, height/2 - 23);
 }
-
 void mousePressed() {
   if (settingsWindow) {
     for (RadioButton button : difficultyButtons) {
@@ -343,7 +325,6 @@ void mousePressed() {
     }
   }
 }
-
 void keyPressed() {
   if (play && 1000 < millis() - lastPressed) {
     if (key == 'c') {
@@ -359,4 +340,16 @@ void keyPressed() {
       lastPressed = millis();
     }
   }
+}
+
+void saveBankBalance() {
+  // Save the current bank balance to the text file
+  String[] lines = {str(bankBalance)};
+  saveStrings("bank_balance.txt", lines);
+}
+
+void exit() {
+  // Called when the sketch is closed
+  saveBankBalance();
+  super.exit(); 
 }

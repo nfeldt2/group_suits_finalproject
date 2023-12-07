@@ -14,11 +14,14 @@ class Card {
   int[] positionsX = {260, 165, 386, 625, 515, 330, 364, 398, 432, 470};
   int[] positionsY = {90, 175, 267, 180, 90, 180, 180, 180, 180, 180};
   ParticleSystem p;
+  
+  boolean doneMoving = false;
 
   Card(String suit, String number) {
     this.suit = suit;
     this.number = number;
     this.encoding = encodeCard();
+    makeParticles();
   }
   
   int encodeCard() {
@@ -73,8 +76,9 @@ class Card {
     this.t = 0;
   }
 
-  void makeParticless() {
+  void makeParticles() {
     p = new ParticleSystem(x, y, 5);
+    p.startSystem();
   }
 
   String getType() {
@@ -92,6 +96,7 @@ class Card {
 
   boolean update() {
     if (t >= 1) {
+      doneMoving = true;
       return true;
     }
     x = lerp(startX, endX, t);
@@ -118,5 +123,9 @@ class Card {
     imageMode(CENTER);
     image(image, 0, 0);
     popMatrix();
+    if (!doneMoving) {
+      p.updateOrigin(x, y);
+      p.show();
+    }
   }
 }

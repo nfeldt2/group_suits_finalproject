@@ -2,9 +2,11 @@ class ParticleSystem {
   int numParticles;
   PVector systemOrigin;
   Particle[] particles;
+  boolean isAlive;
   
   ParticleSystem(float x, float y, int numP) {
     numParticles = numP;
+    isAlive = false;
     systemOrigin = new PVector(x, y);
     
     particles = new Particle[numParticles];
@@ -19,16 +21,22 @@ class ParticleSystem {
   }
   
   void show() {
-    for(int i = 0; i < particles.length; i++) {
-      particles[i].applyForces(0, 0);
-      particles[i].display();
-      if(particles[i].outsideScreen()) {
-        particles[i].pos.x = systemOrigin.x;
-        particles[i].pos.y = systemOrigin.y;
-        particles[i].vel.x = random(-1, 1);
-        particles[i].vel.y = random(-1, 1);
+    if (isAlive) {
+      for(int i = 0; i < particles.length; i++) {
+        particles[i].applyForces(0, 0);
+        particles[i].display();
+        if(particles[i].outsideScreen()) {
+          particles[i].pos.x = systemOrigin.x;
+          particles[i].pos.y = systemOrigin.y;
+          particles[i].vel.x = random(-1, 1);
+          particles[i].vel.y = random(-1, 1);
+        }
       }
-    }
+    }    
+  }
+  
+  void startSystem() {
+     isAlive = true;
   }
   
   void killSystem() {

@@ -1,5 +1,7 @@
 Narrative: One-player game of 2D Texas Hold ‘Em. There will be one user player and 4 AI players that vary in difficulty. Difficulty determines the likelihood of making good plays. There will be a starting menu that allows you to adjust the starting buy-in, the difficulty of the players, and the ability to buy new player silhouettes. When the game ends the player will be redirected to the menu. We will implement Card, Deck, Player, UserPlayer, Dealer, and Table classes. We will include a two-level animation hierarchy that features the moving and rotating of the dealer's hands with a particle effect and cards moving on the table. 
 
+The project contains the following classes: AudioManager, Button, Card, Deck, File, Hand, Particle, ParticleSystems, Player, PrimeLookUp, RadioButton, Table, Main
+
 Jaden Wood:
 
 Joseph Horak:
@@ -8,4 +10,4 @@ Nathan Feldt:
 
 Kireeti Setty:
 
-Abraham Rodriguez:
+Abraham Rodriguez: 

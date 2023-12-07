@@ -120,6 +120,7 @@ class PokerTable{
     community = true;
     currentPlayer = 0;
     current_card = 0;
+    lastPlayer = 5;
     pot = 0;
     for (Player player : players) {
       player.hand.resetHand();
@@ -128,4 +129,5 @@ class PokerTable{
   }
 }
     
+  
   

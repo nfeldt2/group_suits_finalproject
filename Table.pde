@@ -12,6 +12,12 @@ class PokerTable{
   ArrayList<Card> deck;
   ArrayList<Card> displayedCards;
   Map<Integer, Integer> myLookup;
+  final int userPlayer = 2;
+  int lastPlayer = 5;
+  final int numPlayers = 5;
+  int checkValue;
+  boolean roundOver;
+  int pot;
   
   PokerTable(boolean deal_players, ArrayList<Card> deck, Map<Integer, Integer> myLookup) { 
     this.deck = deck;
@@ -19,18 +25,23 @@ class PokerTable{
     this.play = play;
     this.currentPlayer = currentPlayer;
     this.current_card = current_card;
+    this.checkValue = checkValue;
     this.community = community;
+    this.pot = 0;
     players = new ArrayList<Player>();
     this.displayedCards = new ArrayList<Card>();
   }
   
-  void addPlayer(int id) {
-    players.add(new Player(deck, myLookup, id));
+  void addPlayer() {
+    players.add(new Player(deck, myLookup));
   }
   
   void removePlayer(int player) {
     // if the player folds
     players.remove(player);
+  }
+  void incrementPot() {
+    pot += checkValue;
   }
   
   int getWinner() {
@@ -96,7 +107,7 @@ class PokerTable{
     temp.deal(player, cardNumber);
     
     if (myTable.getSize() != 5) {
-      this.addPlayer(player);
+      this.addPlayer();
     }
     
     this.addCard(player, current_card);
@@ -104,13 +115,16 @@ class PokerTable{
     displayedCards.add(temp);
   }
   
-  void write() {
-    int start = 370;
+  void newRound() {
+    current_community = 0;
+    community = true;
+    currentPlayer = 0;
+    current_card = 0;
+    pot = 0;
     for (Player player : players) {
-      fill(0);
-      text("Player: " + player.id + " | Bet: "  + player.currentBet + " | Money: " + player.bank, 140, start);
-      start += 30;
+      player.hand.resetHand();
     }
+    displayedCards = new ArrayList<Card>();
   }
 }
     

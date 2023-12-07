@@ -1,5 +1,5 @@
 class PokerTable{
-  ArrayList<Hand> players;
+  ArrayList<Player> players;
   ArrayList<Card> community_hand;
   boolean round_complete = false;
   boolean community = true;
@@ -20,13 +20,12 @@ class PokerTable{
     this.currentPlayer = currentPlayer;
     this.current_card = current_card;
     this.community = community;
-    players = new ArrayList<Hand>();
+    players = new ArrayList<Player>();
     this.displayedCards = new ArrayList<Card>();
   }
   
-  
   void addPlayer() {
-    players.add(new Hand(deck, myLookup));
+    players.add(new Player(deck, myLookup));
   }
   
   void removePlayer(int player) {
@@ -39,8 +38,8 @@ class PokerTable{
     int winner = 0;
     int best = 10000;
     int temp;
-    for (Hand player : players) {
-      temp = player.findBestHand();
+    for (Player player : players) {
+      temp = player.hand.findBestHand();
       println("player: " + player_num + " rank: " + temp);
       if (temp < best) {
         best = temp;
@@ -56,7 +55,7 @@ class PokerTable{
   }
   
   void addCard(int player, int index) {
-    players.get(player).addCard(index);
+    players.get(player).hand.addCard(index);
   }
   
   
@@ -67,8 +66,8 @@ class PokerTable{
          int player_num = 5 + i;
          int cardNumber = 0;
          temp.deal(player_num, cardNumber);
-         for (Hand player : players) {
-           player.addCard(current_card);
+         for (Player player : players) {
+           player.hand.addCard(current_card);
          }
          displayedCards.add(temp);
          current_card++;
@@ -80,8 +79,8 @@ class PokerTable{
        int player_num = 8 + (current_card - 13);
        int cardNumber = 0;
        temp.deal(player_num, cardNumber);
-       for (Hand player : players) {
-         player.addCard(current_card);
+       for (Player player : players) {
+         player.hand.addCard(current_card);
        }
        displayedCards.add(temp);
        current_card++;

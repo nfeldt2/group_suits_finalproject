@@ -21,11 +21,11 @@ final int maxCards = 10; // Maximum number of cards to deal
 final int playInterval = 10;
 
 int bankBalance = 1000;
-int buyInAmount = 100;
+public int buyInAmount = 100;
 int playerCostume = 0;
 boolean settingsWindow = false;
 
-Button buyInPlusButton, buyInMinusButton, startButton, settingsButton, exitButton, musicToggleButton;
+Button buyInPlusButton, buyInMinusButton, startButton, settingsButton, exitButton, musicToggleButton, raiseButton, checkButton, foldButton;
 RadioButton[] difficultyButtons;
 int aiDifficulty = 0; // 0 for easy, 1 for hard
 
@@ -77,6 +77,10 @@ void setup() {
   settingsButton = new Button(width/2 - 50, 260, 100, 50, blue);
   exitButton = new Button(width/2 - 50, height/2 + 100, 100, 50, red);
   musicToggleButton = new Button(width/2 - 50, height/2 + 25, 100, 50, gray);
+  
+  raiseButton = new Button(width/2 + 100, 340, 100, 30, green);
+  checkButton = new Button(width/2 + 100, 380, 100, 30, gray);
+  foldButton = new Button(width/2 + 100, 420, 100, 30, red);
 
   difficultyButtons = new RadioButton[2];
   difficultyButtons[0] = new RadioButton(width/2 - 50, height/2 - 30, 10, 20, gray, 0, difficultyButtons);
@@ -117,11 +121,17 @@ void Menu() {
     background(255);
     imageMode(CORNER);
     image(tableSprite, 75, 0);
-    image(check, 600, 325);
-    image(fold, 510, 323);
-    image(raise, 670, 325);
+    
+    // gameplay buttons
+    raiseButton.display();
+    checkButton.display();
+    foldButton.display();
+    
     fill(0);
-    text(mouseX + ", " + mouseY, 30, 20);
+    text("Raise", raiseButton.x + 40, raiseButton.y + 20);
+    text("Check", checkButton.x + 40, checkButton.y + 20);
+    text("Fold", foldButton.x + 40, foldButton.y + 20);
+  
     if (myTable.play && millis() - lastPlayTime > playInterval) {
       if (myTable.play) {
         if (myTable.user) {
@@ -252,5 +262,10 @@ void mousePressed() {
     if (settingsButton.isPressed(mouseX, mouseY)) {
       settingsWindow = true;
     }
+  }
+  if (play) {
+    checkButton.isPressed(mouseX, mouseY);
+    raiseButton.isPressed(mouseX, mouseY);
+    foldButton.isPressed(mouseX, mouseY);
   }
 }

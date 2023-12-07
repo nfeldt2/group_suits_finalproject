@@ -315,6 +315,9 @@ void mousePressed() {
     }
   }
   if (play && 1000 < millis() - lastPressed) {
+    if (settingsButton2.isPressed(mouseX, mouseY)) {
+      settingsWindow = true;
+    }
     if (checkButton.isPressed(mouseX, mouseY)) {
       check = true;
       lastPressed = millis();

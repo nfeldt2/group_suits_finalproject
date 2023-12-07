@@ -134,9 +134,10 @@ void Menu() {
     
     text("Bet:" + myTable.checkValue, 350, 400);
     text(message, 200, 350);
+    text("Bank: " + bankBalance, 250, 430);
   
     if (myTable.play && millis() - lastPlayTime > playInterval) {
-      
+      myTable.buyIn = buyInAmount;
       if (myTable.play) {
         print(myTable.currentPlayer);
         if (myTable.currentPlayer == 2) {
@@ -149,6 +150,7 @@ void Menu() {
             //assign check value to amount raised
             myTable.checkValue += 5;
             myTable.incrementPot();
+            bankBalance -= myTable.checkValue;
             myTable.lastPlayer = myTable.currentPlayer;
             myTable.currentPlayer++;
             raise = false;
@@ -196,6 +198,9 @@ void Menu() {
           if (myTable.current_community == 3) {
             int winner = myTable.getWinner();
             print("winner: " + winner);
+            bankBalance -= myTable.buyIn;
+            myTable.pot += myTable.buyIn * 5;
+            bankBalance += myTable.pot;
             myTable.players.get(winner).addPot(myTable.pot);
             myTable.newRound();
             cardCount = 0;
